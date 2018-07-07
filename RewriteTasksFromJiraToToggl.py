@@ -4,17 +4,21 @@ import argparse
 import getpass
 import config
 
-def get_max_results_argument():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("-m", "--maxResults", type=int, help="Number of issues to download from Jira")
-    args = parser.parse_args()
-    return args.maxResults if args.maxResults else 1000
-
-def get_issues_from_jira(maxResults):
+def login_to_jira():
+    print('What is your Jira password ({0})?'.format(config.jira['domain']))
     jira_password = getpass.getpass()
     jira_client = JIRA(config.jira['domain'], basic_auth=(config.jira['username'], jira_password))
 
-    jira_issues_json = jira_client.search_issues("project='{0}' ORDER BY created DESC".format(config.jira['project_key']), maxResults=maxResults)
+    return jira_client
+
+def get_issues_from_jira():
+    jira_client = login_to_jira()
+    
+    print('')
+    jira_project_key = raw_input('Jira Project Key: ')
+    jira_number_of_issues = raw_input('Number of issues to rewrite: ')
+
+    jira_issues_json = jira_client.search_issues("project='{0}' ORDER BY created DESC".format(jira_project_key), maxResults=jira_number_of_issues)
     jira_issues = {}
 
     for issue in jira_issues_json:
@@ -25,7 +29,12 @@ def get_issues_from_jira(maxResults):
 def add_issues_to_toggl(jira_issues):
     toggl = TogglPy.Toggl()
     toggl.setAPIKey(config.toggl['token'])
-    toggl_issues_json = toggl.request('https://www.toggl.com/api/v8/projects/{0}/tasks'.format(config.toggl['project_id']))
+
+    print('')
+    toggl_project_id = raw_input('Toggl Project ID: ')
+    print('')
+
+    toggl_issues_json = toggl.request('https://www.toggl.com/api/v8/projects/{0}/tasks'.format(toggl_project_id))
 
     i = 0
     created_count = 0
@@ -47,23 +56,24 @@ def add_issues_to_toggl(jira_issues):
         }
 
         data['task']['name'] = jira_key + " " + jira_summary
-        data['task']['pid'] = config.toggl['project_id']
+        data['task']['pid'] = toggl_project_id
         data['task']['wid'] = config.toggl['workspace_id']
 
         if jira_key in toggl_issues:
             if jira_summary != toggl_issues[jira_key]:        
                 updated_count += 1
-                print "Updating [{0}/{1}] {2} {3}.".decode('ascii', 'ignore').format(str(i), str(jira_issues_count), jira_key, jira_summary)
+                print("Updating [{0}/{1}] {2} {3}.".decode('ascii', 'ignore').format(str(i), str(jira_issues_count), jira_key, jira_summary))
                 toggl.putRequest('https://www.toggl.com/api/v8/tasks/{0}'.format(toggl_issues[jira_key][0]), data)
         else:
             created_count += 1
-            print "Creating [{0}/{1}] {2} {3}.".decode('ascii', 'ignore').format(str(i), str(jira_issues_count), jira_key, jira_summary)
+            print("Creating [{0}/{1}] {2} {3}.".decode('ascii', 'ignore').format(str(i), str(jira_issues_count), jira_key, jira_summary))
             toggl.postRequest('https://www.toggl.com/api/v8/tasks', data)
 
-    print "Number of created Toggl tasks: " + str(created_count)
-    print "Number of updated Toggl tasks: " + str(updated_count)
+    print('')
+    print("Number of created Toggl tasks: " + str(created_count))
+    print("Number of updated Toggl tasks: " + str(updated_count))
 
 ### main :)
 
-jira_issues = get_issues_from_jira(get_max_results_argument())
+jira_issues = get_issues_from_jira()
 add_issues_to_toggl(jira_issues)
