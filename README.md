@@ -14,7 +14,7 @@ It is the first step in our process. The script lets you to rewrite Jira issues 
 
 It is the second step in our process. When you have your Toggl reports in the time reporting system then you can rewrite it to Jira. Unfortunately, the script adds all the time entries as "your user" instead the original one in Toggl.
 
-### Risks
+*IMPORTANT: Risks for rewriting time entries from Toggl to Jira*
 
 * The script does not look for duplicates.
 * If you run the script 2 times then you will duplicate worklogs in Jira.
