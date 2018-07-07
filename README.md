@@ -6,6 +6,10 @@ Company uses a few tools to track the progress of each project. We use Jira as t
 
 These simple scripts allow you to integrate data between Jira and Toggl. 
 
+# Requirements
+
+`pip install jira`
+
 ## Rewrite tasks from Jira to Toggl
 
 It is the first step in our process. The script lets you to rewrite Jira issues to Toggl. By doing that you are able to use some kind of autocomplete in Toggl to add your time entries to specified Jira task.
