@@ -159,7 +159,7 @@ class Toggl():
             elif projectname:
                 projectid = (self.searchClientProject(projectname))['data']['id']
             else:
-                print 'Too many missing parameters for query'
+                print('Too many missing parameters for query')
                 exit(1)
 
         year = datetime.now().year if not year else year
@@ -189,7 +189,7 @@ class Toggl():
         
         # if they give us nothing let them know we're not returning anything
         if name == None and id == None:
-            print "Error in getWorkspace(), please enter either a name or an id as a filter"
+            print("Error in getWorkspace(), please enter either a name or an id as a filter")
             return None
 
         if id == None: # then we search by name
@@ -216,7 +216,7 @@ class Toggl():
         
         # if they give us nothing let them know we're not returning anything
         if name == None and id == None:
-            print "Error in getClient(), please enter either a name or an id as a filter"
+            print("Error in getClient(), please enter either a name or an id as a filter")
             return None
 
         if id == None: # then we search by name
@@ -253,7 +253,7 @@ class Toggl():
             except:
                 continue
 
-        print 'Could not find client by the name'
+        print('Could not find client by the name')
         return None
 
     def getClientProject(self, clientName, projectName):
@@ -268,7 +268,7 @@ class Toggl():
                 cid = client['id']
 
         if not cid:
-            print 'Could not find such client name'
+            print('Could not find such client name')
             return None
 
         for projct in self.getClientProjects(cid):
@@ -276,7 +276,7 @@ class Toggl():
                 pid = projct['id']
 
         if not pid:
-            print 'Could not find such project name'
+            print('Could not find such project name')
             return None
 
         return self.getProject(pid)
