@@ -7,7 +7,3 @@ jira = dict(
     domain = 'https://your_domain.atlassian.net',
     username = 'your_username',
 )
-
-github = dict(
-	domain = 'https://github.com'	
-)
