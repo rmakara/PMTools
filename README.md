@@ -25,3 +25,7 @@ It is the second step in our process. When you have your Toggl reports in the ti
 
 * The script does not look for duplicates.
 * If you run the script 2 times then you will duplicate worklogs in Jira.
+
+## Rewrite tasks from Github to Toggl
+
+It is the first step in our process. The script lets you to rewrite Github issues to Toggl. By doing that you are able to use some kind of autocomplete in Toggl to add your time entries to specified Github task.
