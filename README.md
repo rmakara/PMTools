@@ -8,7 +8,10 @@ These simple scripts allow you to integrate data between Jira and Toggl.
 
 # Requirements
 
-`pip install jira`
+```
+pip install jira
+pip install PyGithub
+```
 
 ## Rewrite tasks from Jira to Toggl
 

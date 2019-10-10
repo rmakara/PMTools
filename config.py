@@ -8,3 +8,6 @@ jira = dict(
     username = 'your_username',
 )
 
+github = dict(
+	domain = 'https://github.com'	
+)
